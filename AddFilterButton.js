@@ -4,18 +4,25 @@
 @NModuleScope SameAccount
 */
 define(['N/ui/serverWidget','N/log'], function (serverWidget,log) {
-    function addFilterBtn(context) {
+
+    function beforeLoad(context) {
 		try{
-			if(context.type === context.UserEventType.VIEW)
-			{
-				var pageForm = context.form;
-				var filterForm = pageForm.getSublist('filters');
+			if (context.type === context.UserEventType.VIEW) {
+				var form = context.form;
+				var filters = form.getSublist('filters');
 				
-				var customFilterBtn = pageForm.addButton({
-					id: 'custom_Filter_Btn',
-					lable: 'Filter Bill',
+				// Create a new button and add it to the filters section
+				var customButton = form.addButton({
+				  id: 'custpage_custom_button',
+				  label: 'Filter Button',
+				  //functionName: 'onCustomButtonClicked'
 				});
-				customFilterBtn.isDisabled = true;
+				
+				// Set the display type for the button
+				customButton.isDisabled = false;
+				
+				// Add client script to handle the button click event
+				//form.clientScriptModulePath = './path/to/client/script.js';
 			}
 		}catch(ex){
 			log.error({
@@ -26,6 +33,6 @@ define(['N/ui/serverWidget','N/log'], function (serverWidget,log) {
     }
 
     return {
-        beforeLoad: addFilterBtn
+        beforeLoad: beforeLoad
     };
 });
