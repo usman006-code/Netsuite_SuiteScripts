@@ -1,10 +1,11 @@
 /**
- * @NApiVersion 2.x
+ * @NApiVersion 2.0
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
  */
 
 define(['N/currentRecord'], function (currentRecord) {
+  function pageInit() {}
     function applyFilter() {
       var record = currentRecord.get();
       var sublistId = 'custpage_bill_splits';
@@ -12,16 +13,15 @@ define(['N/currentRecord'], function (currentRecord) {
       // Iterate through each line in the sublist
       var lineCount = record.getLineCount({ sublistId: sublistId });
       for (var i = 0; i < lineCount; i++) {
-        // Get the checkbox field for each line
-        var checkboxField = sublistId + '_checkbox'; // Replace with the actual checkbox field ID
-        var isChecked = record.getSublistValue({
-          sublistId: sublistId,
-          fieldId: checkboxField,
-          line: i,
+        var checkboxField = sublistId + '_checkbox';
+        var doNotPay = sublist.getSublistValue({
+          sublistId: 'item',
+          fieldId: 'do_not_pay',
+          line: i
         });
   
         // If the record should be grayed out or uncheckable based on your filter condition
-        if (isChecked) {
+        if (!doNotPay) {
           record.selectLine({ sublistId: sublistId, line: i });
           record.setCurrentSublistValue({
             sublistId: sublistId,
@@ -38,6 +38,7 @@ define(['N/currentRecord'], function (currentRecord) {
     }
   
     return {
+      pageInit:pageInit,
       applyFilter: applyFilter,
     };
   });
