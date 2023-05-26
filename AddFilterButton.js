@@ -3,32 +3,26 @@
 @NScriptType UserEventScript
 @NModuleScope SameAccount
 */
-define(['N/ui/serverWidget','N/log'], function (serverWidget,log) {
+define(['N/ui/serverWidget','N/log','N/currentRecord'], function (serverWidget,log,currentRecord) {
 
     function beforeLoad(context) {
 		try{
-			if (context.type === context.UserEventType.VIEW) {
+			//if (context.type === context.UserEventType.VIEW) {
 				var form = context.form;
 				var filters = form.getSublist('filters');
-				
-				// Create a new button and add it to the filters section
-				var customButton = form.addButton({
-				  id: 'custpage_custom_button',
+				var filterButton = form.addButton({
+				  id: 'custpage_filter_btn',
 				  label: 'Filter Button',
-				  //functionName: 'onCustomButtonClicked'
+                  functionName: 'applyFilter'
 				});
-				
-				// Set the display type for the button
-				customButton.isDisabled = false;
-				
-				// Add client script to handle the button click event
-				//form.clientScriptModulePath = './path/to/client/script.js';
-			}
+				filterButton.isDisabled = false;
+          form.clientScriptModulePath = './FilterButton-DisableRecord.js';
+			//}
 		}catch(ex){
 			log.error({
 				title: "Error",
 				details: ex.message
-			})
+			});
 		}
     }
 
